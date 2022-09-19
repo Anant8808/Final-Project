@@ -41,6 +41,17 @@ public class User {
 	
 	private boolean active;
 	
+	@OneToOne(mappedBy = "user")
+	private Cart cart;
+	
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
 
 	public User(int userId, String name, String email, String password, String address, String about, String gender,
 			Date createAt, String phone) {

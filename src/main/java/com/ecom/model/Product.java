@@ -19,7 +19,15 @@ public class Product {
 	private boolean stock=true;
 	private boolean live;
 	private String imageName;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Category category;
 	
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 	public int getProductId() {
 		return productId;
 	}

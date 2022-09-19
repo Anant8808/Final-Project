@@ -26,23 +26,23 @@ import com.ecom.service.ProductService;
 
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/")
 public class ProductController {
     @Autowired
 	private ProductService productService;
 
-	@PostMapping("/")
-	public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product)
+    @PostMapping("/categories/{categoryId}/products")
+	public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto product,@PathVariable int categoryId)
 	{
 
-		ProductDto createdProduct= this.productService.createProduct(product);
+		ProductDto createdProduct= this.productService.createProduct(product,categoryId);
 		
 		return new ResponseEntity<ProductDto>(createdProduct, HttpStatus.CREATED);
 	}
 	
 
 
-	@PutMapping("/{productId}")
+	@PutMapping("/products/{productId}")
 	public ProductDto updateProduct(@PathVariable("productId")int pid,@RequestBody ProductDto newProduct)
 	{
 		ProductDto updateProduct=this.productService.updateProduct(newProduct,pid);
@@ -50,30 +50,34 @@ public class ProductController {
 	}
 	
 
-	@DeleteMapping("/{productId}")
+	@DeleteMapping("/products/{productId}")
 	public ResponseEntity<ApiResonse> deleteProduct(@PathVariable("productId")int pid)
 	{
 		this.productService.deleteProduct(pid);
 		return new ResponseEntity<ApiResonse>(new ApiResonse("Product Delete successfully !!", false), HttpStatus.OK);
 	}
 
-	@GetMapping("/{productId}")
+	@GetMapping("/products/{productId}")
 	public ProductDto getProduct(@PathVariable("productId")int pid)
 	{
 		ProductDto product=this.productService.getProduct(pid);
 		return product;
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/products")
 	public List<ProductDto> listAll()
 	{
 		List<ProductDto> product=this.productService.getAllProducts();
 		return product;
 		
 	}
-	
-	
-
+	@GetMapping("/categories/{categoryId}/products")
+	public ResponseEntity<List<ProductDto>> getProductsOfCategory(@PathVariable int categoryId)
+	{
+		  List<ProductDto> listOfProducts=this.productService.getPorductsByCategory(categoryId);
+		
+		return new ResponseEntity<List<ProductDto>>(listOfProducts, HttpStatus.CREATED);
+	}
 	
 	
 }

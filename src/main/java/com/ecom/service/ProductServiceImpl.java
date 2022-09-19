@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecom.Exception.ResourceNotFoundException;
+import com.ecom.model.Category;
 import com.ecom.model.Product;
 import com.ecom.payload.ProductDto;
-
+import com.ecom.repositories.CategoryRepository;
 import com.ecom.repositories.ProductRepository;
 
 @Service
@@ -22,11 +23,19 @@ public class ProductServiceImpl implements ProductService{
 	private ProductRepository productRepository;
 	
 	@Autowired
+	private CategoryRepository catRepo;
+	
+	@Autowired
 	private ModelMapper mapper;
 	@Override
-	public ProductDto createProduct(ProductDto productDto) {
+	public ProductDto createProduct(ProductDto productDto,int categoryId) {
+		
+		Category cat = this.catRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Given category is not found"));
+				
 		                
 		  Product newProduct= this.mapper.map(productDto, Product.class);
+		  newProduct.setCategory(cat);
 		
 	        Product savedProduct=this.productRepository.save(newProduct);
 		return this.mapper.map(savedProduct, ProductDto.class);
@@ -77,6 +86,18 @@ public class ProductServiceImpl implements ProductService{
 		
 		return dtos;
 		  
+	}
+
+	@Override
+	public List<ProductDto> getPorductsByCategory(int categoryId) {
+		Category cat = this.catRepo.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Given category is not found"));
+		
+		 List<Product> products=this.productRepository.findByCategory(cat);
+		
+		 List<ProductDto> dtos= products.stream().map((product)->this.mapper.map(product, ProductDto.class)).collect(Collectors.toList());
+		                  
+		return dtos;
 	}
 
 	

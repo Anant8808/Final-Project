@@ -25,7 +25,17 @@ public class ProductDto {
 	private boolean stock=true;
 	private boolean live;
 	private String imageName;
+	private CategoryDto category;
+	
 
+	
+	
+	public CategoryDto getCategory() {
+		return category;
+	}
+	public void setCategory(CategoryDto category) {
+		this.category = category;
+	}
 	public int getProductId() {
 		return productId;
 	}
