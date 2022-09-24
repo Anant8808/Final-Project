@@ -1,6 +1,6 @@
 package com.ecom.controller;
 
-import java.security.Principal;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +41,7 @@ public class CartController {
 	    }
 
 	    @PutMapping("/{productId}")
-	    public ResponseEntity<CartDto> removeProductFromcart(String username,@PathVariable int productId) {
+	    public ResponseEntity<CartDto> removeProductFromcart(@PathVariable int productId) {
 	        CartDto cartDto = this.cartService.removeItem(username,productId);
 	        return new ResponseEntity<CartDto>(cartDto, HttpStatus.OK);
 	    }

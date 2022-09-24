@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ecom.Exception.ResourceNotFoundException;
+import com.ecom.model.Role;
 import com.ecom.model.User;
 import com.ecom.payload.UserDto;
+import com.ecom.repositories.RoleRepository;
 import com.ecom.repositories.UserRepository;
 
 @Service
@@ -20,13 +22,18 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Override
 	public UserDto create(UserDto userDto) {
 		
 		User user =this.mapper.map(userDto, User.class);
-		 User createdUser =this.userRepository.save(user);
 		 
+		 Role role = this.roleRepository.findById(208).get();
+			user.getRoles().add(role);
+			User createdUser =this.userRepository.save(user);
 		 return this.mapper.map(createdUser,UserDto.class);
 	}
 

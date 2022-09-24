@@ -1,12 +1,16 @@
 package com.ecom.payload;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.ecom.model.Role;
 
 
 
@@ -27,6 +31,8 @@ private int userId;
 	
 	private String address;
 	
+	
+
 	private String about;
 	
 	private String gender;
@@ -34,6 +40,8 @@ private int userId;
 	private Date createAt;
 	@NotBlank
 	private String phone;
+	
+	private Set<RoleDto> roles = new HashSet<>();
 
 	//at according to you
 	
@@ -120,7 +128,13 @@ private int userId;
 	}
 	
 	              
-	
+	public Set<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RoleDto> roles) {
+		this.roles = roles;
+	}
 	
 	
 	

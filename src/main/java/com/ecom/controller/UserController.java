@@ -1,13 +1,17 @@
 package com.ecom.controller;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import com.ecom.model.Role;
 import com.ecom.payload.ApiResonse;
+import com.ecom.payload.RoleDto;
 import com.ecom.payload.UserDto;
 import com.ecom.service.UserService;
 
@@ -28,14 +35,20 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	 @Autowired
+      private ModelMapper mapper;
 	// create
 
 	// 201- created
 	@PostMapping("/")
 	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {	
 		userDto.setCreateAt(new Date());
-		userDto.setActive(true);
+		userDto.setActive(true);    
+		userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
 		UserDto createdUser = this.userService.create(userDto);			
 		return new ResponseEntity<UserDto>(createdUser, HttpStatus.CREATED);
 
